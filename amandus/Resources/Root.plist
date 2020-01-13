@@ -49,6 +49,40 @@
 		    <key>user</key>
 		    <string>Muirey03</string>
 		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Designer</string>
+		</dict>
+		<dict>
+		    <key>cellClass</key>
+		    <string>HBTwitterCell</string>
+		    <key>label</key>
+		    <string>whats up?</string>
+		    <key>user</key>
+		    <string>dumbhandle123</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Donate</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBLinkTableCell</string>
+			<key>icon</key>
+			<string>paypal.png</string>
+			<key>label</key>
+			<string>Muirey03's PayPal</string>
+			<key>subtitle</key>
+    		<string>paypal.me/muirey03dev</string>
+			<key>url</key>
+			<string>https://www.paypal.me/muirey03dev</string>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>Amandus</string>
