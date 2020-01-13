@@ -3,6 +3,11 @@
 #import "globals.h"
 #import <Cephei/HBPreferences.h>
 
+//For TravisCI and other people
+#ifndef RLog
+#define RLog NSLog
+#endif
+
 /* DEBUG: */
 // (This was useful for dumping the view heirarchy of PassbookUIService
 // so I thought I'd leave it in the source ¯\_(ツ)_/¯)
