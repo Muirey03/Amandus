@@ -3,19 +3,19 @@
 #import "globals.h"
 #import <Cephei/HBPreferences.h>
 
-//For TravisCI and other people
-#ifndef RLog
-#define RLog NSLog
-#endif
-
 /* DEBUG: */
 // (This was useful for dumping the view heirarchy of PassbookUIService
 // so I thought I'd leave it in the source ¯\_(ツ)_/¯)
 void printViewHeirarchy(UIView* view, NSUInteger indentation)
 {
+    NSString* const path = @"/var/mobile/Documents/heirarchy.txt";
 	NSString* str = [@"" stringByPaddingToLength:indentation withString:@" " startingAtIndex:0];
-	str = [str stringByAppendingFormat:@"%@", [view class]];
-	RLog(@"%@", str);
+	str = [str stringByAppendingFormat:@"%@\n", [view class]];
+    NSMutableString* contents = [NSMutableString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+    contents = contents ?: [NSMutableString new];
+    [contents appendString:str];
+    NSError* err;
+    [contents writeToFile:path atomically:NO encoding:NSUTF8StringEncoding error:&err];
 	for (UIView* v in view.subviews)
 		printViewHeirarchy(v, indentation + 2);
 }
@@ -54,4 +54,14 @@ UIColor* backgroundColor()
 UIColor* textColor()
 {
 	return PreferencesBool(@"darkMode", NO) ? [UIColor colorWithRed:0.922 green:0.922 blue:0.961 alpha:1.] : [UIColor darkGrayColor];
+}
+
+void rotateToIndex(NSMutableArray* arr, NSUInteger index)
+{
+    if (index < arr.count)
+    {
+        NSRange range = NSMakeRange(0, index);
+        [arr addObjectsFromArray:[arr subarrayWithRange:range]];
+        [arr removeObjectsInRange:range];
+    }
 }

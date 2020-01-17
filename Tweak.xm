@@ -16,7 +16,7 @@
 	self.view.backgroundColor = [UIColor colorWithWhite:0. alpha:darkeningAlpha];
 	self.groupStackView.hidden = YES;
 
-	MRYBannerPassView* bannerView = [MRYBannerPassView new];
+	MRYBannerPassView* bannerView = [[MRYBannerPassView alloc] initWithPasses:[self fetchPasses]];
 	self.mryBannerView = bannerView;
 	[self.view addSubview:bannerView];
 
@@ -33,6 +33,29 @@
 		self.dismissTapGesture.delegate = (id<UIGestureRecognizerDelegate>)self;
 		[self.view addGestureRecognizer:self.dismissTapGesture];
 	}
+}
+
+%new
+-(NSArray<PKPass*>*)fetchPasses
+{
+	PKGroupsController* groupsController = MSHookIvar<PKGroupsController*>(self, "_groupsController");
+	NSMutableArray* passes = [NSMutableArray new];
+	NSArray* groups = [groupsController groups];
+	for (PKGroup* group in groups)
+	{
+		if (![group containsPasses] || [group passes].count == 0)
+			continue;
+		NSMutableArray* groupPasses = [[group passes] mutableCopy];
+		rotateToIndex(groupPasses, [group frontmostPassIndex]);
+		[passes addObjectsFromArray:groupPasses];
+	}
+	//rotate to default pass:
+	PKPaymentService* paymentService = MSHookIvar<PKPaymentService*>(self, "_paymentService");
+	NSString* defaultPassID = paymentService.defaultPaymentPassUniqueIdentifier;
+	PKPass* defaultPass = [[%c(PKPassLibrary) sharedInstance] passWithUniqueID:defaultPassID];
+	NSUInteger startingIndex = (defaultPass && [passes containsObject:defaultPass]) ? [passes indexOfObject:defaultPass] : 0;
+	rotateToIndex(passes, startingIndex);
+	return passes;
 }
 
 %new
@@ -152,12 +175,21 @@
 //(this shouldn't really be done with a hook, but I couldn't get it working any other way)
 %hook PKContactlessInterfaceSession
 PKContactlessInterfaceSession* currentSession = nil;
--(id)initWithInternalSession:(id)arg1 targetQueue:(id)arg2
+-(instancetype)initWithInternalSession:(id)arg1 targetQueue:(id)arg2
 {
 	if (currentSession)
 		[currentSession invalidateSession];
 	if ((self = %orig))
 		currentSession = self;
 	return self;
+}
+%end
+
+//hide bottom bar
+%hook _PKUIKVisibilityBackdropView
+-(void)didMoveToWindow
+{
+	%orig;
+	[(UIView*)self removeFromSuperview];
 }
 %end

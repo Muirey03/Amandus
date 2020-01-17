@@ -6,3 +6,4 @@ UIImage* UIKitImage(NSString* imgName);
 BOOL PreferencesBool(NSString* key, BOOL fallback, NSString* domain = PREFS_DOMAIN);
 UIColor* backgroundColor(void);
 UIColor* textColor(void);
+void rotateToIndex(NSMutableArray* arr, NSUInteger index);

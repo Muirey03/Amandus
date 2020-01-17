@@ -5,13 +5,12 @@
 #import "MRYCardCell.h"
 
 @implementation MRYBannerPassView
--(instancetype)init
+-(instancetype)initWithPasses:(NSArray<PKPass*>*)passes
 {
-	if ((self = [super init]))
+	if ((self = [self init]))
 	{
 		_context = [%c(PKPassPresentationContext) contextWithAnimation:NO];
-		_library = [%c(PKPassLibrary) sharedInstance];
-		_passes = [_library passesOfType:1]; //type 1 is payment pass
+		_passes = passes;
 
 		self.backgroundColor = backgroundColor();
 		self.clipsToBounds = YES;

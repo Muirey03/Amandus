@@ -1,5 +1,6 @@
 @class MRYBannerPassView;
 @class PKPass;
+@class PKGroup;
 
 @interface PKPassGroupsViewController : UIViewController
 @property (nonatomic,retain,readonly) UIView* groupStackView;
@@ -7,6 +8,7 @@
 @property (nonatomic, strong) NSLayoutConstraint* bannerTopConstraint;
 @property (nonatomic, strong) UITapGestureRecognizer* dismissTapGesture;
 //%new
+-(NSArray<PKPass*>*)fetchPasses;
 -(void)beginPresentation;
 -(void)beginDismissal;
 @end
@@ -19,6 +21,7 @@
 @interface PKPassLibrary : NSObject
 +(instancetype)sharedInstance;
 -(NSArray<PKPass*>*)passesOfType:(NSUInteger)type;
+-(PKPass*)passWithUniqueID:(NSString*)passID;
 @end
 
 @interface PKImage : NSObject
@@ -69,4 +72,18 @@
 @interface PKPaymentSessionHandle : NSObject
 -(void)invalidateSession;
 -(BOOL)isFirstInQueue;
+@end
+
+@interface PKGroupsController : NSObject
+-(NSArray<PKGroup*>*)groups;
+@end
+
+@interface PKGroup : NSObject
+-(BOOL)containsPasses;
+-(NSArray<PKPass*>*)passes;
+-(NSUInteger)frontmostPassIndex;
+@end
+
+@interface PKPaymentService : NSObject
+@property (nonatomic,retain) NSString* defaultPaymentPassUniqueIdentifier;
 @end

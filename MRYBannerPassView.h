@@ -9,10 +9,10 @@
 	UICollectionView* _collectionView;
 	PKPassFooterView* _paymentView;
 	PKPassPresentationContext* _context;
-	PKPassLibrary* _library;
 	NSArray<PKPass*>* _passes;
 	UIVisualEffectView* _blurView;
 }
+-(instancetype)initWithPasses:(NSArray<PKPass*>*)passes;
 -(void)setupBlurView;
 -(void)setupChevronViews;
 -(void)setupCollectionView;
