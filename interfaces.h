@@ -16,6 +16,7 @@
 @interface PKPassPresentationContext : NSObject
 @property (assign,getter=wantsPersistentCardEmulation,nonatomic) BOOL persistentCardEmulation;
 +(instancetype)contextWithAnimation:(BOOL)animated;
++(instancetype)contextWithAdditionalPassUniqueIdentifiers:(id)identifiers;
 @end
 
 @interface PKPassLibrary : NSObject
@@ -36,9 +37,14 @@
 -(instancetype)initWithPass:(PKPass*)pass;
 @end
 
+@interface PKPassFooterViewConfiguration : NSObject
+-(instancetype)initWithPassView:(id)arg1 state:(long long)arg2;
+@end
+
 @interface PKPassFooterView : UIView
 @property (nonatomic,retain) PKPassView* passView;
 -(instancetype)initWithPassView:(PKPassView*)passView state:(NSInteger)state context:(PKPassPresentationContext*)context;
+-(void)configureWithConfiguration:(PKPassFooterViewConfiguration*)configuration context:(PKPassPresentationContext*)context options:(id)arg3;
 -(void)configureForState:(NSUInteger)state context:(PKPassPresentationContext*)context passView:(PKPassView*)passView;
 -(void)didBecomeVisibleAnimated:(BOOL)animated;
 -(void)_acquireContactlessInterfaceSessionWithSessionToken:(unsigned long long)arg1 handler:(/*^block*/id)arg2;
