@@ -9,7 +9,8 @@
 {
 	if ((self = [self init]))
 	{
-		_context = [%c(PKPassPresentationContext) contextWithAnimation:NO];
+		if([%c(PKPassPresentationContext) respondsToSelector:@selector(contextWithAnimation:)]) _context = [%c(PKPassPresentationContext) contextWithAnimation:NO];
+		else _context = [%c(PKPassPresentationContext) contextWithAdditionalPassUniqueIdentifiers:NULL];
 		_passes = passes;
 
 		self.backgroundColor = backgroundColor();
@@ -89,7 +90,11 @@
 
 -(void)setupPaymentView
 {
-	_paymentView = [[%c(PKPassFooterView) alloc] initWithPassView:nil state:1 context:_context];
+	if([%c(PKPassFooterView) instancesRespondToSelector:@selector(initWithPassView:state:context:)]) _paymentView = [[%c(PKPassFooterView) alloc] initWithPassView:nil state:1 context:_context];
+	else{
+		_paymentView = [[%c(PKPassFooterView) alloc] init];
+		[_paymentView configureWithConfiguration:[[%c(PKPassFooterViewConfiguration) alloc] initWithPassView:NULL state:1] context:_context options:NULL];
+	}
 	_paymentView.tag = mryFooterViewTag;
 	_paymentView.clipsToBounds = YES;
 	[self addSubview:_paymentView];
@@ -107,7 +112,8 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		MRYCardCell* cell = (MRYCardCell*)[self collectionView:_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:pageNo inSection:0]];
-		[_paymentView configureForState:1 context:_context passView:cell.passView];
+		if([_paymentView respondsToSelector:@selector(configureForState:context:passView:)]) [_paymentView configureForState:1 context:_context passView:cell.passView];
+		else [_paymentView configureWithConfiguration:[[%c(PKPassFooterViewConfiguration) alloc] initWithPassView:cell.passView state:1] context:_context options:NULL];
 	});
 }
 
