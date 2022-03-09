@@ -28,7 +28,11 @@
 @property (nonatomic,readonly) CGImageRef imageRef;
 @end
 
-@interface PKPass : NSObject
+@interface PKObject : NSObject <NSCopying, NSSecureCoding>
+@property (nonatomic,copy) NSString * uniqueID;
+@end
+
+@interface PKPass : PKObject
 @property (nonatomic,readonly) PKImage* frontFaceImage;
 @end
 
