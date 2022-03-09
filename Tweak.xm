@@ -52,7 +52,13 @@
 	//rotate to default pass:
 	PKPaymentService* paymentService = MSHookIvar<PKPaymentService*>(self, "_paymentService");
 	NSString* defaultPassID = paymentService.defaultPaymentPassUniqueIdentifier;
-	PKPass* defaultPass = [[%c(PKPassLibrary) sharedInstance] passWithUniqueID:defaultPassID];
+	// fix default pass not working
+	PKPass* defaultPass = nil;
+	for (PKPass *pass in passes) {
+		if ([pass.uniqueID isEqualToString:defaultPassID]) {
+			defaultPass = pass;
+		}
+	}
 	NSUInteger startingIndex = (defaultPass && [passes containsObject:defaultPass]) ? [passes indexOfObject:defaultPass] : 0;
 	rotateToIndex(passes, startingIndex);
 	return passes;
